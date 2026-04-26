@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap');
+
+/* ─── Design Tokens ─────────────────────────────────────── */
+:root {
+  --crisis-red: #ef4444;
+  --crisis-red-dark: #b91c1c;
+  --crisis-red-glow: rgba(239,68,68,0.4);
+  --safe-green: #22c55e;
+  --safe-green-dark: #15803d;
+  --warning-amber: #f59e0b;
+  --info-blue: #3b82f6;
+  --bg-dark: #0a0f1e;
+  --bg-panel: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-hover: #263548;
+  --border-subtle: rgba(255,255,255,0.08);
+  --border-glow: rgba(239,68,68,0.5);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+}
+
+/* ─── Base ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── SOS Pulse Animation ────────────────────────────────── */
+@keyframes sos-pulse {
+  0%   { box-shadow: 0 0 0 0 var(--crisis-red-glow); transform: scale(1); }
+  50%  { box-shadow: 0 0 0 40px rgba(239,68,68,0); transform: scale(1.04); }
+  100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); transform: scale(1); }
+}
+
+@keyframes ring-expand {
+  0%   { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.sos-btn {
+  animation: sos-pulse 2s ease-in-out infinite;
+}
+
+.sos-ring {
+  animation: ring-expand 2s ease-out infinite;
+}
+
+.sos-ring-2 {
+  animation: ring-expand 2s ease-out 0.7s infinite;
+}
+
+/* ─── Glassmorphism ──────────────────────────────────────── */
+.glass {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.glass-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(255,255,255,0.15);
+}
+
+/* ─── Scrollbars ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; }
+
+/* ─── Leaflet Map Overrides ──────────────────────────────── */
+.leaflet-container {
+  background: #1a2035 !important;
+  font-family: 'Inter', sans-serif;
+}
+
+.leaflet-tile {
+  filter: brightness(0.7) saturate(0.8) hue-rotate(195deg);
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-card);
+}
+
+.leaflet-control-zoom a {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-subtle) !important;
+}
+
+/* ─── Confidence Bar ─────────────────────────────────────── */
+@keyframes confidence-fill {
+  from { width: 0%; }
+  to   { width: var(--conf-width); }
+}
+
+.confidence-bar-fill {
+  animation: confidence-fill 0.8s ease-out forwards;
+}
+
+/* ─── Card slide-out on action ────────────────────────────── */
+@keyframes slide-out-right {
+  to { transform: translateX(110%); opacity: 0; height: 0; padding: 0; margin: 0; }
+}
+
+.card-dismiss {
+  animation: slide-out-right 0.4s ease-in forwards;
+  overflow: hidden;
+}
+
+/* ─── Status Dot Blink ───────────────────────────────────── */
+@keyframes status-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+.status-live {
+  animation: status-blink 1.5s ease-in-out infinite;
+}
+
+/* ─── Gradient Text ──────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #ef4444 0%, #f97316 50%, #eab308 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Mobile Nav ─────────────────────────────────────────── */
+.mobile-nav {
+  background: rgba(10, 15, 30, 0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ─── Input Styles ───────────────────────────────────────── */
+.input-dark {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.input-dark:focus {
+  border-color: var(--crisis-red);
+  box-shadow: 0 0 0 2px rgba(239,68,68,0.15);
+}
+
+.input-dark::placeholder {
+  color: var(--text-muted);
+}
+
+/* ─── Button Variants ────────────────────────────────────── */
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(239,68,68,0.4);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #22c55e, #15803d);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-success:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(34,197,94,0.4);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-ghost:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* ─── Hazard Type Pills ──────────────────────────────────── */
+.hazard-flood   { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+.hazard-fire    { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+.hazard-quake   { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+.hazard-landslide { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); }
+.hazard-chemical{ background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+
+/* ─── Dashboard Sidebar ──────────────────────────────────── */
+.sidebar {
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border-subtle);
+}
+
+/* ─── Triage Card ────────────────────────────────────────── */
+.triage-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: all 0.2s;
+}
+
+.triage-card.critical {
+  border-left: 3px solid var(--crisis-red);
+  box-shadow: inset 2px 0 8px rgba(239,68,68,0.1);
+}
+
+.triage-card.warning {
+  border-left: 3px solid var(--warning-amber);
+  box-shadow: inset 2px 0 8px rgba(245,158,11,0.1);
+}
+
+.triage-card.info {
+  border-left: 3px solid var(--info-blue);
+  box-shadow: inset 2px 0 8px rgba(59,130,246,0.1);
+}
