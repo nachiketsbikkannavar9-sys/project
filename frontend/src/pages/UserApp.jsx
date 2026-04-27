@@ -25,7 +25,7 @@ export default function UserApp() {
         <div className="flex items-center gap-2">
           <Shield size={18} style={{ color: '#ef4444' }} />
           <span className="font-black text-base" style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '2px', color: '#ef4444' }}>
-            ANTIGRAVITY
+            RAPID CRISES SYSTEM
           </span>
         </div>
         <div className="flex items-center gap-2">

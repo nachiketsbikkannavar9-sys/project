@@ -89,7 +89,7 @@ export default function AuthorityDashboard() {
             </div>
             <div>
               <div className="font-black text-lg leading-none gradient-text" style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '3px' }}>
-                ANTIGRAVITY
+                RAPID CRISES SYSTEM
               </div>
               <div className="text-xs" style={{ color: 'var(--text-muted)', letterSpacing: '0.5px', whiteSpace: 'nowrap' }}>
                 Real-Time Incident Reporting for Effective

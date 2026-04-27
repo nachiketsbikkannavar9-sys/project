@@ -4,8 +4,8 @@ from routers import reports, alerts, zones
 import uvicorn
 
 app = FastAPI(
-    title="AntiGravity Crisis Response API",
-    description="Backend API for the AntiGravity disaster management platform.",
+    title="RAPID CRISES SYSTEM API",
+    description="Backend API for the RAPID CRISES SYSTEM platform.",
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
@@ -30,7 +30,7 @@ app.include_router(zones.router,   prefix="/api/zones",   tags=["Zones"])
 def health():
     return {
         "status": "operational",
-        "service": "AntiGravity Crisis Response API",
+        "service": "RAPID CRISES SYSTEM API",
         "version": "1.0.0",
     }
 

@@ -1,6 +1,6 @@
-#  Crisis Response Platform
+# RAPID CRISES SYSTEM Platform
 
-Crisis Response Platform is a modern, responsive, and robust disaster management and crisis response platform. It aims to empower civilians to broadcast distress signals effectively and provides authorities with real-time mapping, triage capabilities, and situational awareness.
+RAPID CRISES SYSTEM is a modern, responsive, and robust disaster management and crisis response platform. It aims to empower civilians to broadcast distress signals effectively and provides authorities with real-time mapping, triage capabilities, and situational awareness.
 
 ## 🚀 Features
 

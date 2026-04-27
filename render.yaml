@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: antigravity-backend
+    name: rapid-crises-system-backend
     env: python
     rootDir: backend
     buildCommand: "pip install -r requirements.txt"

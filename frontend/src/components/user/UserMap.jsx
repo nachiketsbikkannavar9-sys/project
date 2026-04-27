@@ -50,35 +50,61 @@ function RecenterMap({ location }) {
   return null;
 }
 
-// ─── Find nearest safe zone ───────────────────────────────────────────────────
-function getNearestSafeZone(userLoc) {
-  if (!userLoc) return mockSafeZones[0];
-  let nearest = null;
-  let minDist = Infinity;
-  mockSafeZones.forEach(sz => {
-    const d = Math.hypot(sz.lat - userLoc.lat, sz.lng - userLoc.lng);
-    if (d < minDist) { minDist = d; nearest = sz; }
-  });
-  return nearest;
+// ─── Find nearest safe zones ───────────────────────────────────────────────────
+function getNearbySafeZones(userLoc) {
+  if (!userLoc || typeof userLoc.lat !== 'number' || typeof userLoc.lng !== 'number' || mockSafeZones.length === 0) {
+    return mockSafeZones.map(sz => ({ ...sz, distance: null }));
+  }
+  let nearby = [];
+  try {
+    const userLL = L.latLng(userLoc.lat, userLoc.lng);
+    nearby = mockSafeZones.map(sz => {
+      try {
+        if (typeof sz.lat !== 'number' || typeof sz.lng !== 'number') return { ...sz, distance: Infinity };
+        const d = userLL.distanceTo(L.latLng(sz.lat, sz.lng));
+        return { ...sz, distance: d };
+      } catch(e) {
+        return { ...sz, distance: Infinity };
+      }
+    }).sort((a, b) => a.distance - b.distance);
+  } catch (err) {
+    console.error('Error with user location:', err);
+    nearby = mockSafeZones.map(sz => ({ ...sz, distance: null }));
+  }
+  return nearby;
 }
 
 export default function UserMap() {
   const { userLocation, setUserLocation } = useApp();
   const [locating, setLocating]    = useState(false);
   const defaultCenter              = [12.9716, 77.5946];
-  const nearestSZ                  = getNearestSafeZone(userLocation);
-  const routePath                  = userLocation && nearestSZ
+  const nearbySZs                  = getNearbySafeZones(userLocation);
+  const nearestSZ                  = nearbySZs[0] || null;
+  const routePath                  = userLocation && nearestSZ && nearestSZ.distance !== Infinity && nearestSZ.distance !== null
     ? [[userLocation.lat, userLocation.lng], [nearestSZ.lat, nearestSZ.lng]]
     : null;
 
   const locateMe = () => {
     setLocating(true);
-    navigator.geolocation?.getCurrentPosition(
+    if (!navigator.geolocation) {
+      console.warn("Geolocation not supported");
+      setUserLocation({ lat: 12.9716, lng: 77.5946, accuracy: 50 });
+      setLocating(false);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
       (pos) => { setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy }); setLocating(false); },
-      () => { setUserLocation({ lat: 12.9716, lng: 77.5946, accuracy: 50 }); setLocating(false); },
+      (err) => { console.warn("Location error:", err); setUserLocation({ lat: 12.9716, lng: 77.5946, accuracy: 50 }); setLocating(false); },
       { enableHighAccuracy: true, timeout: 8000 }
     );
   };
+
+  useEffect(() => {
+    if (!userLocation) {
+      locateMe();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex flex-col h-full">
@@ -222,20 +248,27 @@ export default function UserMap() {
         </button>
       </div>
 
-      {/* Nearest safe zone banner */}
-      {nearestSZ && (
-        <div className="flex items-center gap-3 px-4 py-3 flex-shrink-0"
+      {/* Nearby safe zones banner */}
+      {nearbySZs.length > 0 && (
+        <div className="flex flex-col gap-2 px-4 py-3 flex-shrink-0 max-h-48 overflow-y-auto"
              style={{ background: 'rgba(34,197,94,0.08)', borderTop: '1px solid rgba(34,197,94,0.2)' }}>
-          <Shield size={18} style={{ color: '#4ade80', flexShrink: 0 }} />
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold" style={{ color: '#4ade80' }}>Nearest Safe Zone</div>
-            <div className="text-xs truncate" style={{ color: 'var(--text-secondary)' }}>
-              {nearestSZ.name} — {nearestSZ.available} spots available
+          <div className="text-sm font-semibold flex items-center gap-2 pb-1" style={{ color: '#4ade80' }}>
+            <Shield size={18} style={{ color: '#4ade80' }} />
+            Nearby Safe Zones
+          </div>
+          {nearbySZs.slice(0, 3).map(sz => (
+            <div key={sz.id} className="flex justify-between items-center p-2 rounded" style={{ background: 'rgba(0,0,0,0.2)' }}>
+              <div className="flex-1 min-w-0 pr-2">
+                <div className="text-xs font-semibold truncate" style={{ color: '#4ade80' }}>{sz.name}</div>
+                <div className="text-[10px] truncate" style={{ color: 'var(--text-secondary)' }}>
+                  {sz.available} spots {sz.distance !== null && sz.distance !== Infinity ? `• ${(sz.distance / 1000).toFixed(1)} km away` : ''}
+                </div>
+              </div>
+              <div className="text-[10px] font-mono text-right" style={{ color: '#4ade80' }}>
+                {sz.contact}
+              </div>
             </div>
-          </div>
-          <div className="text-xs font-mono" style={{ color: '#4ade80' }}>
-            {nearestSZ.contact}
-          </div>
+          ))}
         </div>
       )}
     </div>
