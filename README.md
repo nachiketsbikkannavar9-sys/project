@@ -51,4 +51,6 @@ npm install
 npm run dev
 ```
 The Vite development server will start. Open the displayed local URL in your browser to view the app!
+https://rapidcrisessystemplatform.vercel.app/
+https://project-75ks.vercel.app/
 
