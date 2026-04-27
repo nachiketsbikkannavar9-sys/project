@@ -39,7 +39,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 python main.py
 ```
-The FastAPI backend will start at `http://localhost:8000`. You can view the API documentation at `http://localhost:8000/api/docs`.
+The FastAPI backend will start running. You can view the API documentation at the provided local address.
 
 ### 2. Run the Frontend
 
@@ -50,8 +50,5 @@ cd frontend
 npm install
 npm run dev
 ```
-The Vite development server will start. Open the displayed local URL (usually `http://localhost:5173`) in your browser to view the app!
+The Vite development server will start. Open the displayed local URL in your browser to view the app!
 
-## 🤝 Contributing
-
-Contributions to the AntiGravity platform are welcome! Please start by opening an issue or submitting a pull request.
